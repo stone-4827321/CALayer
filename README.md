@@ -61,7 +61,7 @@
 
 - `UIView` 有三个比较重要的布局属性：`frame`，`bounds ` 和 `center`，`CALayer` 对应地叫做 `frame`，`bounds` 和 `position`，以及 `anchorPoint`。
 
-  ![](/Users/3kmac/Desktop/我的文档/图片/CALayer_坐标系.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_%E5%9D%90%E6%A0%87%E7%B3%BB.png)
 
 - `UIView` 的 `frame`，`bounds ` 和 `center` 属性仅仅是存取方法，当操纵 `frame` 时，实际上是在改变位于视图下方 `CALayer` 的 `frame`，不能够独立于图层之外改变视图的 `frame`。
 
@@ -69,7 +69,7 @@
 
   - 当对图层做变换的时候，比如旋转或者缩放，`frame` 实际上代表了覆盖在图层旋转之后的整个轴对齐的矩形区域， `frame` 的宽高可能和 `bounds` 的宽高不再一致了。
 
-  ![](/Users/3kmac/Desktop/我的文档/图片/CALayer_frame.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_frame.png)
 
 - `anchorPoint` 称为锚点，使用单位坐标，定义图层变换（旋转，平移和缩放）时的支点，而 `position` 就是 `anchorPoint ` 在superLayer 中的位置——`position` 的位置是根据 `anchorPoint` 来确定的。
 
