@@ -221,7 +221,7 @@
   - `CATransformLayer` 可以为他的子图层，统一提供景深效果。
   - 下图为分别使用 `CATransformLayer` 和 `CALayer` 做容器时的变换效果。
 
-  ![](/Users/3kmac/Desktop/CALayer_CATransformLayer.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_CATransformLayer.png)
 
 - **`CATiledLayer `** 为载入大图造成的性能问题提供了一个解决方案：将大图分解成小片然后将他们单独按需载入。
 
@@ -242,7 +242,7 @@
 
   - 作用在 `CALayer`，不是 `UIView`。
 
-![](/Users/3kmac/Desktop/我的文档/图片/CALayer_动画框架.png)
+![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_动画框架.png)
 
 ### 隐式动画
 
@@ -304,7 +304,7 @@
 
 - 呈现**：当改变一个图层的属性，属性值的确是立刻更新的。如果想要在动画进行过程中实时获取被修改属性当前的值，就需要通过 `presentationLayer` 来访问**。
 
-  ![](/Users/3kmac/Desktop/我的文档/图片/CALayer_presentationLayer.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_presentationLayer.png)
 
 
 ### 显式动画
@@ -474,13 +474,13 @@
 
 - 如果要在显示屏上显示内容，至少需要一块与屏幕像素数据量一样大的 frame buffer，作为像素数据存储区域，也是 GPU 存储渲染结果的地方。如果有时因为面临一些限制，无法把渲染结果直接写入 frame buffer，而是先暂存在另外的内存区域，之后再写入 frame buffer，那么这个过程被称之为离屏渲染。
 
-  ![](/Users/3kmac/Desktop/我的文档/图片/CALayer_framebuffer.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_framebuffer.png)
 
 - 离屏渲染的整个过程，除需要额外创建一个新的缓冲区，还会多次切换上下文环境（代价巨大）：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。
 
 - 图层的叠加绘制遵循**画家算法**：先绘制场景中的离观察者较远的物体，再绘制较近的物体。当绘制完一层，就会将该层从帧缓存区中移除，以节省空间。
 
-  ![](/Users/3kmac/Desktop/我的文档/图片/CALayer_画家算法.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_画家算法.png)
 
 - 然而有些场景并没有那么简单。作为“画家”的GPU虽然可以一层一层往画布上进行输出，但是无法在某一层渲染完成之后，再回过头来擦除/改变其中的某个部分——因为在这一层之前的若干层 layer 像素数据，已经在渲染中被永久覆盖了。这就意味着，对于每一层 layer，要么能找到一种通过单次遍历就能完成渲染的算法，要么就不得不另开一块内存，借助这个临时中转区域来完成一些更复杂的、多次的修改/剪裁操作。
 
