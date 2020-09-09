@@ -4,7 +4,7 @@
 
 - Core Animation 是一个复合引擎，它能快速的组合屏幕上不同显示的内容。并将其分解成独立图层，存储到 Layer Tree 的体系中。
 
-  ![](/Users/3kmac/Desktop/GitHub/CALayer/Images/CALayer_框架.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_%E6%A1%86%E6%9E%B6.png)
 
 - 每个 `UIView` 都有一个 `CALayer` 的图层属性。
 
