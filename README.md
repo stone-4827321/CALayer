@@ -115,7 +115,7 @@
   layer.mask = maskLayer;
   ```
 
-  ![](/Users/3kmac/Desktop/我的文档/图片/CALayer_蒙板.png)
+  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_蒙板.png)
 
 - 其他：
 
