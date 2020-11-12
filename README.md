@@ -4,7 +4,7 @@
 
 - Core Animation 是一个复合引擎，它能快速的组合屏幕上不同显示的内容。并将其分解成独立图层，存储到 Layer Tree 的体系中。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_%E6%A1%86%E6%9E%B6.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u0hnipgj30u80mawha.jpg)
 
 - 每个 `UIView` 都有一个 `CALayer` 的图层属性。
 
@@ -61,7 +61,7 @@
 
 - `UIView` 有三个比较重要的布局属性：`frame`，`bounds ` 和 `center`，`CALayer` 对应地叫做 `frame`，`bounds` 和 `position`，以及 `anchorPoint`。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_%E5%9D%90%E6%A0%87%E7%B3%BB.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u0tj551j317q0pijuo.jpg)
 
 - `UIView` 的 `frame`，`bounds ` 和 `center` 属性仅仅是存取方法，当操纵 `frame` 时，实际上是在改变位于视图下方 `CALayer` 的 `frame`，不能够独立于图层之外改变视图的 `frame`。
 
@@ -69,7 +69,7 @@
 
   - 当对图层做变换的时候，比如旋转或者缩放，`frame` 实际上代表了覆盖在图层旋转之后的整个轴对齐的矩形区域， `frame` 的宽高可能和 `bounds` 的宽高不再一致了。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_frame.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u1328x0j315c0ra45l.jpg)
 
 - `anchorPoint` 称为锚点，使用单位坐标，定义图层变换（旋转，平移和缩放）时的支点，而 `position` 就是 `anchorPoint ` 在superLayer 中的位置——`position` 的位置是根据 `anchorPoint` 来确定的。
 
@@ -115,7 +115,7 @@
   layer.mask = maskLayer;
   ```
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_蒙板.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u1cdb1sj307l069aa3.jpg)
 
 - 其他：
 
@@ -221,7 +221,7 @@
   - `CATransformLayer` 可以为他的子图层，统一提供景深效果。
   - 下图为分别使用 `CATransformLayer` 和 `CALayer` 做容器时的变换效果。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_CATransformLayer.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u1mc3j0j30780400cm.jpg)
 
 - **`CATiledLayer `** 为载入大图造成的性能问题提供了一个解决方案：将大图分解成小片然后将他们单独按需载入。
 
@@ -237,12 +237,10 @@
 
   - 跨平台的，既可以支持 iOS，也支持 Mac OS；
   - 将大部分实际的绘图任务交给了图形硬件来处理，图形硬件会加速图形渲染的速度。
-
   - 执行动画是在后台，不会阻塞主线程；
-
   - 作用在 `CALayer`，不是 `UIView`。
 
-![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_动画框架.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u20jh52j30ga0b40vq.jpg)
 
 ### 隐式动画
 
@@ -304,7 +302,7 @@
 
 - 呈现**：当改变一个图层的属性，属性值的确是立刻更新的。如果想要在动画进行过程中实时获取被修改属性当前的值，就需要通过 `presentationLayer` 来访问**。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_presentationLayer.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u2keamuj313m0i4gq5.jpg)
 
 
 ### 显式动画
@@ -474,13 +472,13 @@
 
 - 如果要在显示屏上显示内容，至少需要一块与屏幕像素数据量一样大的 frame buffer，作为像素数据存储区域，也是 GPU 存储渲染结果的地方。如果有时因为面临一些限制，无法把渲染结果直接写入 frame buffer，而是先暂存在另外的内存区域，之后再写入 frame buffer，那么这个过程被称之为离屏渲染。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_framebuffer.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u2w50idj30uc0dyabb.jpg)
 
 - 离屏渲染的整个过程，除需要额外创建一个新的缓冲区，还会多次切换上下文环境（代价巨大）：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。
 
 - 图层的叠加绘制遵循**画家算法**：先绘制场景中的离观察者较远的物体，再绘制较近的物体。当绘制完一层，就会将该层从帧缓存区中移除，以节省空间。
 
-  ![](https://github.com/stone-4827321/CALayer/blob/master/Images/CALayer_画家算法.png)
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u326klaj30oj076t8y.jpg)
 
 - 然而有些场景并没有那么简单。作为“画家”的GPU虽然可以一层一层往画布上进行输出，但是无法在某一层渲染完成之后，再回过头来擦除/改变其中的某个部分——因为在这一层之前的若干层 layer 像素数据，已经在渲染中被永久覆盖了。这就意味着，对于每一层 layer，要么能找到一种通过单次遍历就能完成渲染的算法，要么就不得不另开一块内存，借助这个临时中转区域来完成一些更复杂的、多次的修改/剪裁操作。
 
