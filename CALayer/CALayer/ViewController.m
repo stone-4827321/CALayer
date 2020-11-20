@@ -63,7 +63,7 @@
 //    UIImage *image = [UIImage imageNamed:@"1.jpg"];
 //    layer.contents = (__bridge id)image.CGImage;
     
-//    layer.delegate = self;
+    layer.delegate = self;
 //    [layer setNeedsDisplay];
 }
 

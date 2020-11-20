@@ -2,7 +2,7 @@
 
 ## 概述
 
-- Core Animation 是一个复合引擎，它能快速的组合屏幕上不同显示的内容。并将其分解成独立图层，存储到 Layer Tree 的体系中。
+- Core Animation 是一个复合引擎，它能快速的组合屏幕上不同显示的内容，并将其分解成独立图层，存储到 Layer Tree 的体系中。
 
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u0hnipgj30u80mawha.jpg)
 
@@ -15,28 +15,28 @@
 
 - 自定义 `UIView` 的子时类，可以重载以下方法，设置其 `CALayer` 类型。
 
-  - 充分利用 `CALayer` 及其各种子类，用  `+layerClass`  来创建基于不同图层的视图是一个简单可复用的方法。
-
   ```objective-c
-  - (Class)layerClass {
+  + (Class)layerClass {
       return [STLayer class];
   }
   ```
 
-> 为什么 iOS要基于 `UIView` 和 `CALayer` 提供两个平行的层级关系呢？为什么不用一个简单的层级来处理所有事情呢？
->
-> 原因在于职责分离，这样可以避免很多重复代码。在 iOS 和 Mac OS 两个平台下，事件和用户交互存在比较大的差异。比如 Mac OS 的用户交互可以通过鼠标/键盘控制，而 iOS 则通过手势触摸. 这就是为何 iOS 开发界面使用 `UIKit` 和 `UIView`，而 Mac OS 开发界面使用 `AppKit` 和 `NSView`。 因为他们之间的用户交互手段不一样，但是它们在功能上是非常类似的，所以都有 Core Animation 框架和 `CALayer`。而 `CALayer` 只处理显示上的需求，不做交互上的需求处理，这样设计就可以减少非常多不必要的代码。
+  > 充分利用 `CALayer` 及其各种子类，创建基于不同图层的视图是一个简单可复用的方法。
+
+- **为什么 iOS要基于 `UIView` 和 `CALayer` 提供两个平行的层级关系呢？为什么不用一个简单的层级来处理所有事情呢？**
+
+  原因在于职责分离，这样可以避免很多重复代码。在 iOS 和 Mac OS 两个平台下，事件和用户交互存在比较大的差异。比如 Mac OS 的用户交互可以通过鼠标/键盘控制，而 iOS 则通过手势触摸。这就是为何 iOS 开发界面使用 `UIKit` 和 `UIView`，而 Mac OS 开发界面使用 `AppKit` 和 `NSView`。 因为他们之间的用户交互手段不一样，但是它们在功能上是非常类似的，所以都有 Core Animation 框架和 `CALayer`。而 `CALayer` 只处理显示上的需求，不做交互上的需求处理，这样设计就可以减少非常多不必要的代码。
 
 ## 内容呈现
 
 - **更新机制**
-  - 系统有基本稳定的刷新频率，在 Layer 内容改变的时候，系统会把这个 Layer 标记为**需要刷新**，即被调用 **`setNeedsDisplay`**，也可以主动调用该方法对 Layer 进行标记。
+  - 系统有基本稳定的刷新频率，在 Layer 内容改变的时候，系统会把这个 Layer 标记为**需要绘制**，即被调用 **`setNeedsDisplay`**，也可以主动调用该方法对 Layer 进行标记。
   - 每次刷新时，把上次刷新之后被标记的 Layer 一次性全部提交给图形系统，即被调用 **`display`** ，该方法一般无需主动调用，而是交给系统调用，从而获得更好的调用时机；
-  - 如果真的急需刷新，可以主动调用 **`displayIfNeeded`**，立即对已被标记为需要刷新的 Layer 进行刷新。
+  - 如果真的急需刷新，可以主动调用 **`displayIfNeeded`**，立即对已被标记为需要刷新的 Layer 进行绘制。
 
 - **内容提供**
 
-  - 系统依次检测 `display`、delegate 的 `displayLayer:`、`drawInContext:`、delegate 的`drawLayer:inContext:`，其中任何一个方法实现了，就认为已经为 Layer 提供了内容。
+  - 系统依次检测 `display`、delegate 的 `displayLayer:`、`drawInContext:`、delegate 的`drawLayer:inContext:`，其中任何一个方法实现了，就认为已经为 Layer 提供了内容，进行绘制。
 
   > `display` 和 `drawInContext:` 可以通过自定义 `CALayer` 子类来实现。
   >
@@ -75,7 +75,7 @@
 
   > position 点是相对 suerLayer 的，anchorPoint 点是相对 Layer 的，两者是相对不同的坐标空间的一个重合点。
 
-- 互不影响原则：单独修改 `position` 与`anchorPoint` 中任何一个属性都不影响另一个属性。因此，修改 `anchorPoint` 时会移动图层——`position` 不受影响，只是 `frame.origin` 做相应的改变。
+  - 互不影响原则：单独修改 `position` 与`anchorPoint` 中任何一个属性都不影响另一个属性。因此，修改 `anchorPoint` 时会移动图层——`position` 不受影响，只是 `frame.origin` 做相应的改变。
 
   ```objective-c
   frame.origin.x = position.x - anchorPoint.x * bounds.size.width；  
@@ -162,7 +162,7 @@
 
 - **3D 变换**：图层在3D空间内进行移动或转动。
 
-  - 将图层和一个变换矩阵 **`CATransform3D`**（4*4）相乘以得出的结果矩阵来实现变换的。
+  - 将图层和一个变换矩阵 `CATransform3D`（4*4）相乘以得出的结果矩阵来实现变换的。
   - 通过调整 `m34` （4*4矩阵中第三列第四行的数）来让图层更加有 3D 的透视效果（两条相等长度的边，远离视角的边看起来更短）。
 
   ```objective-c
@@ -467,45 +467,94 @@
   self.layer.backgroundColor = [UIColor blueColor].CGColor;
   ```
 
+## 渲染
 
-## 离屏渲染
+- 视图的渲染流程（简单）：
 
-- 如果要在显示屏上显示内容，至少需要一块与屏幕像素数据量一样大的 frame buffer，作为像素数据存储区域，也是 GPU 存储渲染结果的地方。如果有时因为面临一些限制，无法把渲染结果直接写入 frame buffer，而是先暂存在另外的内存区域，之后再写入 frame buffer，那么这个过程被称之为离屏渲染。
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gkuq5x9olxj30uc0dyabb.jpg)
 
-  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u2w50idj30uc0dyabb.jpg)
+  - CPU 计算需要显示的内容，然后通过数据总线传给 GPU；
+  - GPU 拿到数据之后开始渲染数据并保存在帧缓存区中
+  - 随后视频控制器会按照  VSync 信号逐行读取帧缓冲区的数据，经过数模转换传递给显示器显示。
 
-- 离屏渲染的整个过程，除需要额外创建一个新的缓冲区，还会多次切换上下文环境（代价巨大）：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。
+- 视图的渲染流程（详细）：
 
-- 图层的叠加绘制遵循**画家算法**：先绘制场景中的离观察者较远的物体，再绘制较近的物体。当绘制完一层，就会将该层从帧缓存区中移除，以节省空间。
+  ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gkuq6mdl70j30zm0dijrg.jpg)
+
+  - Handle Events：Core Animation 在 RunLoop 中注册了一个Observer，监听 BeforeWaiting（即将休眠） 和 Exit（退出） 事件。当一个触发事件到来时，RunLoop 被唤醒并执行相关代码。在代码中可能涉及到视图的更新，当代码执行完毕后，RunLoop 变为即将休眠或退出状态，则触发 Core Animation 的渲染流程。
+
+  - Commit Transaction：整个步骤在 CPU 中进行
+    - Layout：构建和布局视图；
+    - Display：绘制视图，并不是真正的显示，正常情况下只会得到图元信息。但是如果重写了 `drawRect:` 或 `drawLayer:inContext:` 方法，则调用 Core Graphics 绘制方法得到位图信息，并暂存到系统额外申请的一块内存中。
+    - Prepare：主要是图片的解码和转换（除了用 `imageNamed`：方法从 bundle 加载的 image 会立刻解压之外，其他的比如直接从硬盘读入，或者从网络上下载的 image 不会立刻解压，只有在真正要渲染的时候才会解压）。
+    - Commit：图层打包并发送到 Render Server。
+
+  - Render Server：分为 Metal 和 Core Graphics 两种处理方式，并最终得到位图信息，存储到 GPU 的帧缓存器（ Frame Buffer）。
+
+    - 执行 Metal 将图元信息转换为位图信息：
+      - Geometry 几何处理阶段：处理图元；
+      - Rasterization 光栅化阶段：图元转换为像素；
+      - Pixel 像素处理阶段：像素转换为位图。
+    - 获取 Core Graphics 绘制得到的位图信息。
+
+  - Graphics Hardware：视频控制器（Video Controller）会读取帧缓冲器中的信息，经过数模转换传递给显示器（Monitor），进行显示。
+
+
+  >  iOS 设备的屏幕刷新频率是 60HZ。如果上面的这些步骤在一个刷新周期之内无法做完（1/60s），就会造成掉帧。
+
+
+### 离屏渲染
+
+- **离屏渲染的定义**
+
+  - Render Server 处理过程中，至少需要一块与屏幕像素数据量一样大的帧缓存器，作为像素数据存储区域，也是 GPU 存储渲染结果的地方。
+  - 在某些情况下，无法把渲染结果直接写入帧缓存器，而是先暂存在另外的内存区域，之后再写入帧缓存器，那么这个过程被称之为离屏渲染。
+
+  > 在 `UIView` 中实现了 `drawRect:` 方法后，位图信息不是直接绘制到由 GPU 掌管的帧缓存器，只能暂时先放在另一块内存之中，也可以属于“离屏渲染”。
+
+- **离屏渲染的坏处**
+
+  - 需要额外创建一个新的缓冲区。
+  - 多次切换上下文环境（代价巨大）：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。
+
+- **离屏渲染的产生**
+
+  - Render Server 对图层的叠加绘制遵循**画家算法**：先绘制场景中的离观察者较远的物体，再绘制较近的物体，依次输入相应的位图信息到帧缓存器，当位图信息被取出并显示完成后则被丢弃。
 
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u326klaj30oj076t8y.jpg)
 
-- 然而有些场景并没有那么简单。作为“画家”的GPU虽然可以一层一层往画布上进行输出，但是无法在某一层渲染完成之后，再回过头来擦除/改变其中的某个部分——因为在这一层之前的若干层 layer 像素数据，已经在渲染中被永久覆盖了。这就意味着，对于每一层 layer，要么能找到一种通过单次遍历就能完成渲染的算法，要么就不得不另开一块内存，借助这个临时中转区域来完成一些更复杂的、多次的修改/剪裁操作。
+  - 作为“画家”的GPU虽然可以一层一层往画布上进行输出，但是无法在某一层渲染完成之后，再回过头来擦除或改变其中的某个部分——因为在这一层之前的若干层 Layer 像素数据，已经在渲染中被永久覆盖了。这就意味着，对于每一层 Layer，要么能找到一种通过单次遍历就能完成渲染的算法，要么就不得不另开一块内存，借助这个临时中转区域来完成一些更复杂的、多次的修改/剪裁操作。
+  - 另一方面，出于效率目的，可以将内容提前渲染保存在离屏缓冲区中，达到复用的目的。如开启光栅化。
 
 - 图层的以下属性将会触发屏幕外绘制：
 
-  - **圆角+裁剪**：一旦为 contents 设置了内容 ，无论是直接设置图片、通过内容提供其他方法绘制内容、添加有图像信息的子视图等，再加上圆角+裁剪，就会触发离屏渲染。
+  - **圆角+裁剪**：一旦为 contents 设置了内容 ，无论是直接设置图片、通过内容提供其他方法绘制内容、添加有图像信息的子视图等，再加上圆角 + 裁剪，就会触发离屏渲染。
+
+    但 iOS 9 之后做了优化， contents 设置了内容 + 圆角 + 裁剪并不会触发离屏渲染。但如果加上了背景色、边框或其他有图像内容的图层，还是会产生离屏渲染
+
+    ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gkvdv2ihquj30b408hmxr.jpg)
 
   ```objective-c
   CALayer *layer = [CALayer layer];
   layer.frame = CGRectMake(100, 100, 100, 100);
         
-  // 1
+  // 1 contents 设置内容
   layer.contents = (__bridge id)[UIImage imageNamed:@"1.jpg"].CGImage;
-  // 2
+  // 2 背景色
   layer.backgroundColor = [UIColor redColor].CGColor;
-  // 3
+  // 3 边框
   layer.borderWidth = 2.0;
     
-  // 圆角+裁剪
+  // 圆角
   layer.cornerRadius = 50;
+  // 裁剪
   layer.masksToBounds = YES;
         
   [self.view.layer addSublayer:layer];
    
-  // 1+2或1+3会触发离屏渲染，1+3或2(iOS9之后)不会触发
+  // 1+2或1+3会触发离屏渲染
   ```
 
-  - **阴影**：阴影显示在所有图层内容的下方，需要最先被渲染但又无法在图层内容绘制之前得知具体的阴影形状。只能另外申请一块内存，把 layer 内容都先画好，再根据渲染结果的形状，添加阴影到 frame buffer，最后把内容画上去。如果能够预先知道（通过 `shadowPath` 属性）阴影的形状，就可以先被独立地渲染出来，不需要依赖图层内容，也就不再需要离屏渲染了。
-  - 蒙板；
-  - 组透明度；
+  - **阴影**：阴影显示在所有图层内容的下方，需要最先被渲染但又无法在图层内容绘制之前得知具体的阴影形状。只能另外申请一块内存，把 Layer 内容都先画好，再根据渲染结果的形状，添加阴影到帧缓存器中，最后再把 Layer 内容画上去。如果能够预先知道（通过 `shadowPath` 属性）阴影的形状，就可以先被独立地渲染出来，不需要依赖图层内容，也就不再需要离屏渲染了。
+  - 组透明度：alpha 并不是分别应用在每一层之上，而是只有到整个 Layer 树画完之后，再统一加上alpha，最后和底下其他 Layer 的像素进行组合。
+  - 蒙板：mask 是应用在 Layer 和其所有子 Layer 的组合之上的。

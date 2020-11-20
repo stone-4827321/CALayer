@@ -19,7 +19,6 @@
 		4CFBEE9A24FF7B2B00819410 /* STLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFBEE9924FF7B2B00819410 /* STLayer.m */; };
 		4CFBEE9D24FF8D3200819410 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4CFBEE9C24FF8D3200819410 /* 1.jpg */; };
 		4CFBEEA124FF96C100819410 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFBEE9F24FF96C100819410 /* 2.png */; };
-		4CFBEEA324FF974D00819410 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFBEEA224FF974D00819410 /* 1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +40,6 @@
 		4CFBEE9924FF7B2B00819410 /* STLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = STLayer.m; sourceTree = "<group>"; };
 		4CFBEE9C24FF8D3200819410 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		4CFBEE9F24FF96C100819410 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
-		4CFBEEA224FF974D00819410 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 1.png; path = ../../../../../Downloads/1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +72,6 @@
 		4CFBEE7B24FF77C600819410 /* CALayer */ = {
 			isa = PBXGroup;
 			children = (
-				4CFBEEA224FF974D00819410 /* 1.png */,
 				4CFBEE9F24FF96C100819410 /* 2.png */,
 				4CFBEE9C24FF8D3200819410 /* 1.jpg */,
 				4CBFE5BF24FFCB5600110739 /* 3.png */,
@@ -160,7 +157,6 @@
 				4CFBEE8724FF77C600819410 /* Main.storyboard in Resources */,
 				4CE7C89B2501E1910047317E /* 1.mp4 in Resources */,
 				4CBFE5C024FFCB5600110739 /* 3.png in Resources */,
-				4CFBEEA324FF974D00819410 /* 1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
