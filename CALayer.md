@@ -1,6 +1,4 @@
-# CALayer
-
-## 概述
+# 概述
 
 - Core Animation 是一个复合引擎，它能快速的组合屏幕上不同显示的内容，并将其分解成独立图层，存储到 Layer Tree 的体系中。
 
@@ -27,7 +25,7 @@
 
   原因在于职责分离，这样可以避免很多重复代码。在 iOS 和 Mac OS 两个平台下，事件和用户交互存在比较大的差异。比如 Mac OS 的用户交互可以通过鼠标/键盘控制，而 iOS 则通过手势触摸。这就是为何 iOS 开发界面使用 `UIKit` 和 `UIView`，而 Mac OS 开发界面使用 `AppKit` 和 `NSView`。 因为他们之间的用户交互手段不一样，但是它们在功能上是非常类似的，所以都有 Core Animation 框架和 `CALayer`。而 `CALayer` 只处理显示上的需求，不做交互上的需求处理，这样设计就可以减少非常多不必要的代码。
 
-## 内容呈现
+# 内容呈现
 
 - **更新机制**
   - 系统有基本稳定的刷新频率，在 Layer 内容改变的时候，系统会把这个 Layer 标记为**需要绘制**，即被调用 **`setNeedsDisplay`**，也可以主动调用该方法对 Layer 进行标记。
@@ -57,7 +55,7 @@
   - `contentsRect`：显示寄宿图的一个子域，`CGRect` 类型，使用比例单位，即默认为 {0, 0, 1, 1}。
   - `contentsCenter`：使用比例单位，`CGRect` 类型，默认为 {0, 0, 1, 1}，表示当图片要对齐时（由 `contentsGravity` 决定，只有 contents 大小和图层大小不一致时，才发挥作用），各个部分时均匀地拉伸。
 
-## 几何位置
+# 几何位置
 
 - `UIView` 有三个比较重要的布局属性：`frame`，`bounds ` 和 `center`，`CALayer` 对应地叫做 `frame`，`bounds` 和 `position`，以及 `anchorPoint`。
 
@@ -92,7 +90,7 @@
 
 - `zPosition` 在Z轴上描述图层位置，最实用的功能就是改变图层的显示顺序，可以使后加入的图层却显示在下面。注意：不会改变事件传递的顺序。
 
-## 视觉效果
+# 视觉效果
 
 - **圆角**：`cornerRadius` 设置的圆角只对背景色和图层边框有用，对 `contents` 属性中的 image 无效。当 `contents` 有内容或者内容背景不是透明的时，单靠 `cornerRadius` 是无法完成圆角效果的，还需要设置 `maskToBounds = YES` 对超过图层边界的内容进行裁剪。 
 
@@ -137,7 +135,7 @@
 
   - `doubleSided` 属性，用来控制图层背面是否绘制，默认为 YES。
 
-## 变换
+# 变换
 
 - **仿射变换**：图层在 2D 平面上进行平移、旋转和缩放。
 
@@ -194,7 +192,7 @@
 
   - 当一个图层有多个3D变换的子图层，为了让整个视图绘制的更有3D效果，应该首先把它们都放置于屏幕中央，然后通过平移（使用3D平移，不要用仿射变换）来把它移动到指定位置（而不是直接改变它的position），这样所有的 3D 图层都共享一个灭点。
 
-## 专用图层
+# 专用图层
 
 - `CALayer` 具有一些非常有用的绘图和动画功能。但 Core Animation 不仅作用于图片和颜色，`CALayer` 拓展了其他一些专用于某种功能的子类，以增强 Core Animation 的绘图能力。
 
@@ -231,7 +229,7 @@
 
   > https://www.jianshu.com/p/d02355dd18d8>
 
-## 动画
+# 动画
 
 - CoreAnimation 就是核心动画，拥有一组非常强大的 API，用来做动画非常简单，但是效果非常绚丽
 
@@ -242,7 +240,7 @@
 
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u20jh52j30ga0b40vq.jpg)
 
-### 隐式动画
+## 隐式动画
 
 - `CALayer` 的部分属性，只要修改其最初设定的值，就会产生动画效果。
 
@@ -305,7 +303,7 @@
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u2keamuj313m0i4gq5.jpg)
 
 
-### 显式动画
+## 显式动画
 
 - 显式动画能够对一些属性做指定的自定义动画，或者创建非线性动画，比如沿着任意一条曲线移动。
 
@@ -351,7 +349,7 @@
   - 设置动画的相关属性； 
   - 给 `CALayer` 添加动画 `addAnimation:forKey:` 。
 
-#### 基础动画
+### 基础动画
 
   - **`CABasicAnimation`** 基础动画，通过设置初始状态、结束状态或插值状态进行动画。
 
@@ -412,8 +410,7 @@
   animation.removedOnCompletion = NO;
   ```
 
-
-#### 关键帧动画
+### 关键帧动画
 
 - **`CAKeyframeAnimation` ** 关键帧动画，通过设置不同的值来进行关键帧的属性和时间控制。
 
@@ -436,7 +433,7 @@
 
 - 还可以通过属性 `path` 可以设置一个 `CGPathRef` 路径，让图层跟着路径移动，只对 `anchorPoint` 和 `position` 属性生效。
 
-#### 组动画
+### 组动画
 
 - **`CAAnimationGroup`** 组动画，使得多个动画并发执行。
 
@@ -447,7 +444,7 @@
   group.animations = @[rotation, position];
   ```
 
-#### 转场动画
+### 转场动画
 
 - **`CATransition`** 转场动画，用于做过渡动画或者转场动画，能够为层提供移出屏幕和移入屏幕的动画效果。
 
@@ -467,9 +464,9 @@
   self.layer.backgroundColor = [UIColor blueColor].CGColor;
   ```
 
-## 渲染
+# 渲染
 
-- 视图的渲染流程（简单）：
+- 视图的渲染流程：CPU 把内容放到缓存里，GPU 从缓存里读取数据然后渲染到屏幕上。
 
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gkuq5x9olxj30uc0dyabb.jpg)
 
@@ -502,8 +499,7 @@
 
   >  iOS 设备的屏幕刷新频率是 60HZ。如果上面的这些步骤在一个刷新周期之内无法做完（1/60s），就会造成掉帧。
 
-
-### 离屏渲染
+## 离屏渲染
 
 - **离屏渲染的定义**
 
