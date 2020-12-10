@@ -412,7 +412,7 @@
 
 ### 关键帧动画
 
-- **`CAKeyframeAnimation` ** 关键帧动画，通过设置不同的值来进行关键帧的属性和时间控制。
+- **`CAKeyframeAnimation`** 关键帧动画，通过设置不同的值来进行关键帧的属性和时间控制。
 
   ```objective-c
   // 创建CABasicAnimation对象
