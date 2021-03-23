@@ -7,6 +7,7 @@
 - 每个 `UIView` 都有一个 `CALayer` 的图层属性。
 
   - Layer 给 View 提供了基础设施，使得绘制内容和呈现动画更容易，更低耗。
+  
   - Layer 不参与 View 的事件处理和响应链。
 
   - View 在系统中的作用就是接收用户点击和呈现内容，而 Layer 就是负责了内容呈现的工作，不参与用户点击事件处理的工作。
@@ -28,8 +29,11 @@
 # 内容呈现
 
 - **更新机制**
+
   - 系统有基本稳定的刷新频率，在 Layer 内容改变的时候，系统会把这个 Layer 标记为**需要绘制**，即被调用 **`setNeedsDisplay`**，也可以主动调用该方法对 Layer 进行标记。
+  
   - 每次刷新时，把上次刷新之后被标记的 Layer 一次性全部提交给图形系统，即被调用 **`display`** ，该方法一般无需主动调用，而是交给系统调用，从而获得更好的调用时机；
+  
   - 如果真的急需刷新，可以主动调用 **`displayIfNeeded`**，立即对已被标记为需要刷新的 Layer 进行绘制。
 
 - **内容提供**
@@ -51,8 +55,11 @@
 - 属性设置
 
   - `contentsGravity`：设置寄宿图的内容的对齐方式，类似视图的 `cotentMode` 属性。
+  
   - `contentsScale`：设置寄宿图的像素尺寸和视图大小的比例，一般设置为 `layer.contentsScale = [[UIScreen mainScreen] scale];`。
+  
   - `contentsRect`：显示寄宿图的一个子域，`CGRect` 类型，使用比例单位，即默认为 {0, 0, 1, 1}。
+  
   - `contentsCenter`：使用比例单位，`CGRect` 类型，默认为 {0, 0, 1, 1}，表示当图片要对齐时（由 `contentsGravity` 决定，只有 contents 大小和图层大小不一致时，才发挥作用），各个部分时均匀地拉伸。
 
 # 几何位置
@@ -118,13 +125,21 @@
 - 其他：
 
   - `borderWidth`：边界的宽度。
+  
   - `borderColor`：边界的颜色。
+  
   - `shadowOpacity`：阴影的透明度，值在 0~1 之间。
+  
   - `shadowColor`：阴影的颜色，默认为黑色。
+  
   - `shadowOffset`：阴影的方向的距离，`CGSize `类型：宽度控制横向位移，高度控制纵向位移，默认值是{0, -3}。
+  
   - `shadowRadius`：阴影的模糊度。
+  
   - `shadowPath`：任意阴影形状（实时计算阴影也是非常消耗资源）。
+  
   - `maskToBounds`：是否不显示超出该图层边界的内容。
+  
   - `minificationFilter`、`magnificationFilter`：图层缩放拉伸时的描绘方式，分别用于缩小和放大
 
   > 图层的阴影继承自内容的外形，而不是根据边界来确定。为了计算出阴影的形状，Core Animation 会将寄宿图（包括子视图）考虑在内，然后通过这些来完美搭配图层形状从而创建一个阴影。
@@ -161,6 +176,7 @@
 - **3D 变换**：图层在3D空间内进行移动或转动。
 
   - 将图层和一个变换矩阵 `CATransform3D`（4*4）相乘以得出的结果矩阵来实现变换的。
+  
   - 通过调整 `m34` （4*4矩阵中第三列第四行的数）来让图层更加有 3D 的透视效果（两条相等长度的边，远离视角的边看起来更短）。
 
   ```objective-c
@@ -197,9 +213,13 @@
 - `CALayer` 具有一些非常有用的绘图和动画功能。但 Core Animation 不仅作用于图片和颜色，`CALayer` 拓展了其他一些专用于某种功能的子类，以增强 Core Animation 的绘图能力。
 
 - **`CAShapeLayer `** 是一个通过矢量图形而不是 bitmap 来绘制的图层子类，可以用来绘制所有能够通过 `CGPath` 来表示的形状。
+
   - 渲染快速。使用了硬件加速，绘制同一图形会比用Core Graphics快很多。
+  
   - 高效使用内存。 不需要像普通 `CALayer` 一样创建一个寄宿图形，所以无论有多大，都不会占用太多的内存。
+  
   - 不会被图层边界剪裁掉。可以在边界之外绘制，不会像在使用 Core Graphics 的普通 `CALayer` 一样被剪裁掉。
+  
   - 不会出现像素化。做3D变换时，不会像一个有寄宿图的普通图层一样变得像素化。
 
 - **`CATextLayer`** 以图层的形式包含了 `UILabel` 几乎所有的绘制特性，并且渲染速度更快。
@@ -234,8 +254,11 @@
 - CoreAnimation 就是核心动画，拥有一组非常强大的 API，用来做动画非常简单，但是效果非常绚丽
 
   - 跨平台的，既可以支持 iOS，也支持 Mac OS；
+  
   - 将大部分实际的绘图任务交给了图形硬件来处理，图形硬件会加速图形渲染的速度。
+  
   - 执行动画是在后台，不会阻塞主线程；
+  
   - 作用在 `CALayer`，不是 `UIView`。
 
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u20jh52j30ga0b40vq.jpg)
@@ -273,10 +296,15 @@
 - 如果通过 `UIView`  关联的 `CALayer` 修改属性，是不会有动画效果的。这是因为 `UIView` 关闭掉了隐式动画—— `CALayer` 的 `actionForKey:` 方法返回为 `[NSNull null]`。
 
   - 按照以下顺序查找：
+  
     - 其代理实现了方法 `actionForLayer:forKey:` 并返回一个遵循 `CAAction` 协议的对象，如`CAAnimation` 对象；或返回 nil，进行下一步搜索；或返回 `[NSNull null]`，搜索结束，关闭了隐式动画。
+    
     - `actions` 字典属性中对应的 key 是否有值。
+    
     - `style` 字典属性中含有一个 actions 对应的字典，该字典中对应的 key 是否有值。
+    
     - 调用类方法 `defaultActionForKey:` 方法是否获得值。
+    
     - 以上搜索都未找到，则返回一个 `CABasicAnimation` 对象。
 
   ```objective-c
@@ -295,10 +323,12 @@
 - `CALayer` 内部系统维护着三种 Layer Tree，分别为 **modelLayer**，**presentLayer** 和 **renderLayer**。
 
   - renderLayer 为系统渲染时内部维护，对于开发者来讲是透明不可见的。
+  
   - modelLayer 用户操作和设置属性的图层，保存了图层的基本数据。
+  
   - presentLayer 当使用 Core Animation 做动画时，每一帧动的位置都可以从这个图层中读取到。
 
-- 呈现**：当改变一个图层的属性，属性值的确是立刻更新的。如果想要在动画进行过程中实时获取被修改属性当前的值，就需要通过 `presentationLayer` 来访问**。
+- 呈现：**当改变一个图层的属性，属性值的确是立刻更新的。如果想要在动画进行过程中实时获取被修改属性当前的值，就需要通过 `presentationLayer` 来访问**。
 
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u2keamuj313m0i4gq5.jpg)
 
@@ -345,8 +375,11 @@
   ```
 
 - 显式动画一般步骤：
+
   - 创建 `CAAnimation` 的子类对象；
+  
   - 设置动画的相关属性； 
+  
   - 给 `CALayer` 添加动画 `addAnimation:forKey:` 。
 
 ### 基础动画
@@ -471,7 +504,9 @@
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gkuq5x9olxj30uc0dyabb.jpg)
 
   - CPU 计算需要显示的内容，然后通过数据总线传给 GPU；
-  - GPU 拿到数据之后开始渲染数据并保存在帧缓存区中
+  
+  - GPU 拿到数据之后开始渲染数据并保存在帧缓存区中；
+  
   - 随后视频控制器会按照  VSync 信号逐行读取帧缓冲区的数据，经过数模转换传递给显示器显示。
 
 - 视图的渲染流程（详细）：
@@ -481,17 +516,25 @@
   - Handle Events：Core Animation 在 RunLoop 中注册了一个Observer，监听 BeforeWaiting（即将休眠） 和 Exit（退出） 事件。当一个触发事件到来时，RunLoop 被唤醒并执行相关代码。在代码中可能涉及到视图的更新，当代码执行完毕后，RunLoop 变为即将休眠或退出状态，则触发 Core Animation 的渲染流程。
 
   - Commit Transaction：整个步骤在 CPU 中进行
+  
     - Layout：构建和布局视图；
+    
     - Display：绘制视图，并不是真正的显示，正常情况下只会得到图元信息。但是如果重写了 `drawRect:` 或 `drawLayer:inContext:` 方法，则调用 Core Graphics 绘制方法得到位图信息，并暂存到系统额外申请的一块内存中。
+    
     - Prepare：主要是图片的解码和转换（除了用 `imageNamed`：方法从 bundle 加载的 image 会立刻解压之外，其他的比如直接从硬盘读入，或者从网络上下载的 image 不会立刻解压，只有在真正要渲染的时候才会解压）。
+    
     - Commit：图层打包并发送到 Render Server。
 
   - Render Server：分为 Metal 和 Core Graphics 两种处理方式，并最终得到位图信息，存储到 GPU 的帧缓存器（ Frame Buffer）。
 
     - 执行 Metal 将图元信息转换为位图信息：
+    
       - Geometry 几何处理阶段：处理图元；
+      
       - Rasterization 光栅化阶段：图元转换为像素；
+      
       - Pixel 像素处理阶段：像素转换为位图。
+      
     - 获取 Core Graphics 绘制得到的位图信息。
 
   - Graphics Hardware：视频控制器（Video Controller）会读取帧缓冲器中的信息，经过数模转换传递给显示器（Monitor），进行显示。
@@ -504,6 +547,7 @@
 - **离屏渲染的定义**
 
   - Render Server 处理过程中，至少需要一块与屏幕像素数据量一样大的帧缓存器，作为像素数据存储区域，也是 GPU 存储渲染结果的地方。
+  
   - 在某些情况下，无法把渲染结果直接写入帧缓存器，而是先暂存在另外的内存区域，之后再写入帧缓存器，那么这个过程被称之为离屏渲染。
 
   > 在 `UIView` 中实现了 `drawRect:` 方法后，位图信息不是直接绘制到由 GPU 掌管的帧缓存器，只能暂时先放在另一块内存之中，也可以属于“离屏渲染”。
@@ -511,6 +555,7 @@
 - **离屏渲染的坏处**
 
   - 需要额外创建一个新的缓冲区。
+  
   - 多次切换上下文环境（代价巨大）：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。
 
 - **离屏渲染的产生**
@@ -520,6 +565,7 @@
   ![](https://tva1.sinaimg.cn/large/0081Kckwgy1gk4u326klaj30oj076t8y.jpg)
 
   - 作为“画家”的GPU虽然可以一层一层往画布上进行输出，但是无法在某一层渲染完成之后，再回过头来擦除或改变其中的某个部分——因为在这一层之前的若干层 Layer 像素数据，已经在渲染中被永久覆盖了。这就意味着，对于每一层 Layer，要么能找到一种通过单次遍历就能完成渲染的算法，要么就不得不另开一块内存，借助这个临时中转区域来完成一些更复杂的、多次的修改/剪裁操作。
+
   - 另一方面，出于效率目的，可以将内容提前渲染保存在离屏缓冲区中，达到复用的目的。如开启光栅化。
 
 - 图层的以下属性将会触发屏幕外绘制：
@@ -552,5 +598,7 @@
   ```
 
   - **阴影**：阴影显示在所有图层内容的下方，需要最先被渲染但又无法在图层内容绘制之前得知具体的阴影形状。只能另外申请一块内存，把 Layer 内容都先画好，再根据渲染结果的形状，添加阴影到帧缓存器中，最后再把 Layer 内容画上去。如果能够预先知道（通过 `shadowPath` 属性）阴影的形状，就可以先被独立地渲染出来，不需要依赖图层内容，也就不再需要离屏渲染了。
+  
   - 组透明度：alpha 并不是分别应用在每一层之上，而是只有到整个 Layer 树画完之后，再统一加上alpha，最后和底下其他 Layer 的像素进行组合。
+  
   - 蒙板：mask 是应用在 Layer 和其所有子 Layer 的组合之上的。
